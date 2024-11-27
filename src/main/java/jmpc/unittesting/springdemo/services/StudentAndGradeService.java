@@ -16,9 +16,14 @@ public class StudentAndGradeService {
   }
 
   public void createStudent(String firstName, String lastName, String email) {
-    CollegeStudent student = new CollegeStudent(firstName, lastName, email);
+    var student = new CollegeStudent(firstName, lastName, email);
     student.setId(0);
 
     repository.save(student);
+  }
+
+  public boolean checkIfStudentIsNull(int studentId) {
+    var student = repository.findById(studentId);
+    return student.isEmpty();
   }
 }

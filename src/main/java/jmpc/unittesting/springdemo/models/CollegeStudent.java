@@ -3,16 +3,16 @@ package jmpc.unittesting.springdemo.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 public class CollegeStudent implements Student {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-    @Column
+    @Column(name = "firstname")
     private String firstname;
-    @Column
+    @Column(name = "lastname")
     private String lastname;
-    @Column(name="email_address")
+    @Column(name="email")
     private String emailAddress;
 
     public CollegeStudent() {
