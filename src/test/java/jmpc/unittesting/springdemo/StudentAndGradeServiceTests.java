@@ -36,6 +36,17 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
+  public void deleteStudentService() {
+    var student = studentRepository.findById(1);
+    Assertions.assertTrue(student.isPresent(), "Return true");
+
+    studentService.delete(1);
+
+    student = studentRepository.findById(1);
+    Assertions.assertFalse(student.isPresent(), "Return false");
+  }
+
+  @Test
   public void isStudentNullCheck() {
     Assertions.assertFalse(studentService.checkIfStudentIsNull(1));
     Assertions.assertTrue(studentService.checkIfStudentIsNull(0));

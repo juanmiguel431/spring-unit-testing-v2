@@ -26,4 +26,8 @@ public class StudentAndGradeService {
     var student = repository.findById(studentId);
     return student.isEmpty();
   }
+
+  public void delete(int studentId) {
+    repository.deleteById(studentId);
+  }
 }
