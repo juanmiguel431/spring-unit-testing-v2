@@ -30,4 +30,8 @@ public class StudentAndGradeService {
   public void delete(int studentId) {
     repository.deleteById(studentId);
   }
+
+  public Iterable<CollegeStudent> getGradebook() {
+    return repository.findAll();
+  }
 }

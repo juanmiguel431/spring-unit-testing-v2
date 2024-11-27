@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
@@ -33,6 +37,20 @@ public class StudentAndGradeServiceTests {
   @AfterEach
   public void afterEach() {
     jdbcTemplate.execute("delete from students");
+  }
+
+  @Sql("/insertData.sql")
+  @Test
+  public void getGradebookService() {
+    Iterable<CollegeStudent> iterableCollegeStudents = studentService.getGradebook();
+
+    List<CollegeStudent> collegeStudents = new ArrayList<>();
+
+    for (var item : iterableCollegeStudents) {
+      collegeStudents.add(item);
+    }
+
+    Assertions.assertEquals(5, collegeStudents.size());
   }
 
   @Test
