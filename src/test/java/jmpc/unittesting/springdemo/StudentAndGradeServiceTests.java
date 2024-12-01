@@ -79,4 +79,9 @@ public class StudentAndGradeServiceTests {
 
     Assertions.assertEquals("juanmiguel431@gmail.com", student.getEmail(), "Find by email");
   }
+
+  @Test
+  public void createGradeService() {
+    studentService.createGrade(80.5, 1, "Math");
+  }
 }

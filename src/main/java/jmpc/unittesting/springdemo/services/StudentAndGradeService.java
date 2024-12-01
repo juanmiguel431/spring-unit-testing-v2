@@ -1,7 +1,6 @@
 package jmpc.unittesting.springdemo.services;
 
 import jmpc.unittesting.springdemo.models.CollegeStudent;
-import jmpc.unittesting.springdemo.models.Student;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,22 +10,22 @@ import java.util.Optional;
 @Service
 public class StudentAndGradeService {
 
-  private final StudentRepository repository;
+  private final StudentRepository studentRepository;
 
   @Autowired
-  public StudentAndGradeService(StudentRepository repository) {
-    this.repository = repository;
+  public StudentAndGradeService(StudentRepository studentRepository) {
+    this.studentRepository = studentRepository;
   }
 
   public void createStudent(String firstName, String lastName, String email) {
     var student = new CollegeStudent(firstName, lastName, email);
     student.setId(0);
 
-    repository.save(student);
+    studentRepository.save(student);
   }
 
   public Optional<CollegeStudent> findById(int studentId) {
-    return repository.findById(studentId);
+    return studentRepository.findById(studentId);
   }
 
   public boolean checkIfStudentIsNull(int studentId) {
@@ -40,10 +39,14 @@ public class StudentAndGradeService {
   }
 
   public void delete(int studentId) {
-    repository.deleteById(studentId);
+    studentRepository.deleteById(studentId);
   }
 
   public Iterable<CollegeStudent> getGradebook() {
-    return repository.findAll();
+    return studentRepository.findAll();
+  }
+
+  public void createGrade(double grade, int studentId, String type) {
+
   }
 }
