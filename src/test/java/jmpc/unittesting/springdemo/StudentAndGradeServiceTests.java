@@ -1,6 +1,7 @@
 package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.GradeType;
+import jmpc.unittesting.springdemo.models.GradebookCollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.MathGrade;
 import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
@@ -157,5 +158,23 @@ public class StudentAndGradeServiceTests {
     studentAndGradeService.deleteGradeById(1, GradeType.MATH);
     var grade = mathGradeRepository.findById(1);
     Assertions.assertTrue(grade.isEmpty(), "Grade must be not found");
+  }
+
+  @Test
+  public void studentInformation() throws Exception {
+    var gradebookCollegeStudent = studentAndGradeService.getInformation(1);
+
+    Assertions.assertNotNull(gradebookCollegeStudent);
+    Assertions.assertEquals(1, gradebookCollegeStudent.getId());
+    Assertions.assertEquals("Juan", gradebookCollegeStudent.getFirstname());
+    Assertions.assertEquals("Paulino", gradebookCollegeStudent.getLastname());
+    Assertions.assertEquals("juanmiguel431@gmail.com", gradebookCollegeStudent.getEmail());
+
+    var mathGradeResults = gradebookCollegeStudent.getStudentGrades().getMathGradeResults();
+    var scienceGradeResults = gradebookCollegeStudent.getStudentGrades().getScienceGradeResults();
+    var historyGradeResults = gradebookCollegeStudent.getStudentGrades().getHistoryGradeResults();
+    Assertions.assertEquals(1, mathGradeResults.size());
+    Assertions.assertEquals(1, scienceGradeResults.size());
+    Assertions.assertEquals(1, historyGradeResults.size());
   }
 }

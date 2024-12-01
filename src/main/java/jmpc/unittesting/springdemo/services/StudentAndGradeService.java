@@ -1,6 +1,9 @@
 package jmpc.unittesting.springdemo.services;
 
+import jmpc.unittesting.springdemo.models.Grade;
 import jmpc.unittesting.springdemo.models.GradeType;
+import jmpc.unittesting.springdemo.models.GradebookCollegeStudent;
+import jmpc.unittesting.springdemo.models.StudentGrades;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.HistoryGrade;
 import jmpc.unittesting.springdemo.models.entities.MathGrade;
@@ -12,6 +15,7 @@ import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -130,5 +134,34 @@ public class StudentAndGradeService {
         throw new Exception("type not allowed " + type);
       }
     }
+  }
+
+  public GradebookCollegeStudent getInformation(int studentId) throws Exception {
+    Optional<CollegeStudent> student = studentRepository.findById(studentId);
+
+    if (student.isEmpty()) {
+      throw new Exception("Student not found");
+    }
+
+    var mathGrades = mathGradeRepository.findMathGradeByStudentId(studentId);
+    var scienceGrades = scienceGradeRepository.findScienceGradeByStudentId(studentId);
+    var historyGrades = historyGradeRepository.findHistoryGradeGradeByStudentId(studentId);
+
+    var mathGradeList = new ArrayList<Grade>();
+    mathGrades.forEach(mathGradeList::add);
+
+    var scienceGradeList = new ArrayList<Grade>();
+    scienceGrades.forEach(scienceGradeList::add);
+
+    var historyGradeList = new ArrayList<Grade>();
+    historyGrades.forEach(historyGradeList::add);
+
+    var studentGrades = new StudentGrades();
+    studentGrades.setMathGradeResults(mathGradeList);
+    studentGrades.setScienceGradeResults(scienceGradeList);
+    studentGrades.setHistoryGradeResults(historyGradeList);
+
+    var s = student.get();
+    return new GradebookCollegeStudent(s.getId(), s.getFirstname(), s.getLastname(), s.getEmail(), studentGrades);
   }
 }
