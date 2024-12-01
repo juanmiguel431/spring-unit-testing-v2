@@ -177,4 +177,11 @@ public class StudentAndGradeServiceTests {
     Assertions.assertEquals(1, scienceGradeResults.size());
     Assertions.assertEquals(1, historyGradeResults.size());
   }
+
+  @Test
+  public void studentInformationThrowsException() throws Exception {
+    Assertions.assertThrows(Exception.class, () -> {
+      var gradebookCollegeStudent = studentAndGradeService.getInformation(0);
+    });
+  }
 }
