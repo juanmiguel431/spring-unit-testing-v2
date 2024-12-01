@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -21,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GradebookControllerTests {
 
   @Autowired
+  private ApplicationContext context;
+
+  @Autowired
   private MockMvc mockMvc;
 
   @Autowired
@@ -30,10 +34,6 @@ public class GradebookControllerTests {
   private StudentRepository studentRepository;
 
   private static MockHttpServletRequest request;
-
-//  Unnecessary code added by the teacher
-//  @MockBean
-//  private StudentAndGradeService studentAndGradeServiceMock;
 
   @BeforeAll
   public static void beforeAll() {
@@ -74,15 +74,6 @@ public class GradebookControllerTests {
 
   @Test
   public void getStudentHttpRequest() throws Exception {
-
-//    Unnecessary code added by the teacher
-//    var collegeStudent1 = new GradebookCollegeStudent("Eric", "Roby", "eric_roby@test.com");
-//    var collegeStudent2 = new GradebookCollegeStudent("Chad", "Darby", "chad_darby@test.com");
-//    var collegeStudentList = new ArrayList<CollegeStudent>(Arrays.asList(collegeStudent1, collegeStudent2));
-//    when(studentAndGradeServiceMock.getGradebook()).thenReturn(collegeStudentList);
-//    var serviceResponse = studentAndGradeServiceMock.getGradebook();
-//    Assertions.assertIterableEquals(collegeStudentList, serviceResponse);
-
     var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/"))
         .andExpect(status().isOk())
         .andReturn();

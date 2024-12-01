@@ -27,6 +27,10 @@ public class GradebookController {
   @PostMapping("/")
   public String createStudent(@ModelAttribute(name = "students") CollegeStudent student, Model model) {
     studentAndGradeService.createStudent(student.getFirstname(), student.getLastname(), student.getEmail());
+
+    var students = studentAndGradeService.getGradebook();
+    model.addAttribute("students", students);
+
     return "index";
   }
 
