@@ -39,10 +39,7 @@ public class GradebookController {
 
     studentAndGradeService.delete(id);
 
-    var students = studentAndGradeService.getGradebook();
-    model.addAttribute("students", students);
-
-    return "index";
+    return "redirect:/";
   }
 
   @GetMapping("/studentInformation/{id}")
