@@ -33,12 +33,11 @@ public class GradebookController {
   @DeleteMapping("/{id}")
   public String delete(@PathVariable Integer id, Model model) {
     var exists = studentAndGradeService.checkIfStudentExists(id);
-
-    if (exists) {
-      studentAndGradeService.delete(id);
-    } else {
-      model.addAttribute("error", "Student not found");
+    if (!exists) {
+      return "error";
     }
+
+    studentAndGradeService.delete(id);
 
     var students = studentAndGradeService.getGradebook();
     model.addAttribute("students", students);

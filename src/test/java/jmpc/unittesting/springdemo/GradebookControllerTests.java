@@ -70,14 +70,11 @@ public class GradebookControllerTests {
 
   @Test
   public void deleteStudentHttpRequest() throws Exception {
-    var studentId = 1;
-
-    var student = studentRepository.findById(studentId);
-
-    Assertions.assertTrue(student.isPresent(), "Student should be found");
+    var student = studentRepository.findByEmail("juanmiguel431@gmail.com");
+    Assertions.assertNotNull(student, "Student should be found");
 
     var mvcResult = mockMvc.perform(
-        MockMvcRequestBuilders.delete("/{id}", studentId)
+        MockMvcRequestBuilders.delete("/{id}", student.getId())
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andReturn();
@@ -86,9 +83,26 @@ public class GradebookControllerTests {
 
     Assertions.assertEquals("index", mnv.getViewName());
 
-    student = studentRepository.findById(studentId);
+    var any = studentRepository.findById(student.getId());
 
-    Assertions.assertTrue(student.isEmpty(), "Student should be not found");
+    Assertions.assertTrue(any.isEmpty(), "Student should be not found");
+  }
+
+  @Test
+  public void errorIfWhileDeletingStudentDoesNotExistHttpRequest() throws Exception {
+    var studentId = 0;
+    var student = studentRepository.findById(studentId);
+    Assertions.assertTrue(student.isEmpty(), "Student should not be found");
+
+    var mvcResult = mockMvc.perform(
+            MockMvcRequestBuilders.delete("/{id}", studentId)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var mnv = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("error", mnv.getViewName());
   }
 
   @Test
