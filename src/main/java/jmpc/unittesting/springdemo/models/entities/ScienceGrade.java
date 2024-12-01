@@ -1,11 +1,11 @@
-package jmpc.unittesting.springdemo.models;
+package jmpc.unittesting.springdemo.models.entities;
 
 import jakarta.persistence.*;
-
+import jmpc.unittesting.springdemo.models.Grade;
 
 @Entity
-@Table(name = "history_grade")
-public class HistoryGrade implements Grade {
+@Table(name = "science_grade")
+public class ScienceGrade implements Grade {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
@@ -14,11 +14,11 @@ public class HistoryGrade implements Grade {
     @Column(name="grade")
     private double grade;
 
-    public HistoryGrade() {
+    public ScienceGrade() {
 
     }
 
-    public HistoryGrade(double grade) {
+    public ScienceGrade(double grade) {
         this.grade = grade;
     }
 

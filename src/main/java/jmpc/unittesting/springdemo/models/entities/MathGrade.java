@@ -1,6 +1,7 @@
-package jmpc.unittesting.springdemo.models;
+package jmpc.unittesting.springdemo.models.entities;
 
 import jakarta.persistence.*;
+import jmpc.unittesting.springdemo.models.Grade;
 
 @Entity
 @Table(name = "math_grade")

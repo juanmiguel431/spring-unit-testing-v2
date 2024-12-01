@@ -1,6 +1,8 @@
 package jmpc.unittesting.springdemo.models;
 
-public class GradebookCollegeStudent extends CollegeStudent{
+import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+
+public class GradebookCollegeStudent extends CollegeStudent {
 
     private int id;
 

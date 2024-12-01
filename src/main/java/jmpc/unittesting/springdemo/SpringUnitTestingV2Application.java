@@ -1,6 +1,10 @@
 package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.*;
+import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+import jmpc.unittesting.springdemo.models.entities.HistoryGrade;
+import jmpc.unittesting.springdemo.models.entities.MathGrade;
+import jmpc.unittesting.springdemo.models.entities.ScienceGrade;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

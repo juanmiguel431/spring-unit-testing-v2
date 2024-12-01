@@ -1,6 +1,6 @@
 package jmpc.unittesting.springdemo.services;
 
-import jmpc.unittesting.springdemo.models.CollegeStudent;
+import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

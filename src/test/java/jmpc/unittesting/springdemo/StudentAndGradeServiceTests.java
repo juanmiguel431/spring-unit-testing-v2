@@ -1,6 +1,6 @@
 package jmpc.unittesting.springdemo;
 
-import jmpc.unittesting.springdemo.models.CollegeStudent;
+import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
