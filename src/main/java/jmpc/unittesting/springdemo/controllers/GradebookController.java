@@ -37,7 +37,7 @@ public class GradebookController {
       return "error";
     }
 
-    studentAndGradeService.delete(id);
+    studentAndGradeService.deleteStudentById(id);
 
     return "redirect:/";
   }

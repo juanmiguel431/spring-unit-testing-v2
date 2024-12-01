@@ -24,7 +24,7 @@ import java.util.List;
 public class StudentAndGradeServiceTests {
 
   @Autowired
-  private StudentAndGradeService studentService;
+  private StudentAndGradeService studentAndGradeService;
 
   @Autowired
   private StudentRepository studentRepository;
@@ -65,7 +65,7 @@ public class StudentAndGradeServiceTests {
   @Sql("/insertData.sql")
   @Test
   public void getGradebookService() {
-    Iterable<CollegeStudent> iterableCollegeStudents = studentService.getGradebook();
+    Iterable<CollegeStudent> iterableCollegeStudents = studentAndGradeService.getGradebook();
 
     List<CollegeStudent> collegeStudents = new ArrayList<>();
 
@@ -77,11 +77,11 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
-  public void deleteStudentService() {
+  public void deleteStudentStudentByIdService() {
     var student = studentRepository.findById(1);
     Assertions.assertTrue(student.isPresent(), "Return true");
 
-    studentService.delete(1);
+    studentAndGradeService.deleteStudentById(1);
 
     student = studentRepository.findById(1);
     Assertions.assertFalse(student.isPresent(), "Return false");
@@ -89,14 +89,14 @@ public class StudentAndGradeServiceTests {
 
   @Test
   public void isStudentNullCheck() {
-    Assertions.assertFalse(studentService.checkIfStudentIsNull(1));
-    Assertions.assertTrue(studentService.checkIfStudentIsNull(0));
+    Assertions.assertFalse(studentAndGradeService.checkIfStudentIsNull(1));
+    Assertions.assertTrue(studentAndGradeService.checkIfStudentIsNull(0));
   }
 
   @Test
   public void createStudentService() {
 
-    studentService.createStudent("Juan", "Paulino", "juanmiguel431@create.com");
+    studentAndGradeService.createStudent("Juan", "Paulino", "juanmiguel431@create.com");
 
     CollegeStudent student = studentRepository.findByEmail("juanmiguel431@create.com");
 
@@ -105,9 +105,9 @@ public class StudentAndGradeServiceTests {
 
   @Test
   public void createGradeService() throws Exception {
-    studentService.createGrade(80.5, 1, GradeType.MATH);
-    studentService.createGrade(75.4, 1, GradeType.SCIENCE);
-    studentService.createGrade(88.6, 1, GradeType.HISTORY);
+    studentAndGradeService.createGrade(80.5, 1, GradeType.MATH);
+    studentAndGradeService.createGrade(75.4, 1, GradeType.SCIENCE);
+    studentAndGradeService.createGrade(88.6, 1, GradeType.HISTORY);
 
     var mathGrades = mathGradeRepository.findMathGradeByStudentId(1);
     var scienceGrades = scienceGradeRepository.findScienceGradeByStudentId(1);
@@ -124,7 +124,7 @@ public class StudentAndGradeServiceTests {
   @Test
   public void createGradeWithInvalidParamsThrowsExceptionService1() {
     Assertions.assertThrows(Exception.class, () -> {
-      studentService.createGrade(-80.5, 1, GradeType.MATH);
+      studentAndGradeService.createGrade(-80.5, 1, GradeType.MATH);
     });
   }
 
@@ -132,7 +132,14 @@ public class StudentAndGradeServiceTests {
   public void createGradeWithInvalidParamsThrowsExceptionService2() {
     Assertions.assertThrows(Exception.class, () -> {
       var literature = GradeType.values()[5];
-      studentService.createGrade(80.5, 1, literature);
+      studentAndGradeService.createGrade(80.5, 1, literature);
     }, "It should throws an exception");
+  }
+
+  @Test
+  public void deleteGradeService() throws Exception {
+    studentAndGradeService.deleteGradeById(1, GradeType.MATH);
+    var grade = mathGradeRepository.findById(1);
+    Assertions.assertTrue(grade.isEmpty(), "Grade must be not found");
   }
 }

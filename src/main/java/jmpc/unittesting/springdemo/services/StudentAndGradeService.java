@@ -51,8 +51,24 @@ public class StudentAndGradeService {
     return student.isPresent();
   }
 
-  public void delete(int studentId) {
+  public void deleteStudentById(int studentId) {
     studentRepository.deleteById(studentId);
+  }
+
+  public void deleteGradeById(int gradeId, GradeType type) throws Exception {
+    switch (type){
+      case MATH:
+        this.mathGradeRepository.deleteById(gradeId);
+        break;
+      case SCIENCE:
+        this.scienceGradeRepository.deleteById(gradeId);
+        break;
+      case HISTORY:
+        this.historyGradeRepository.deleteById(gradeId);
+        break;
+      default:
+        throw new Exception("type not allowed " + type);
+    }
   }
 
   public Iterable<CollegeStudent> getGradebook() {
