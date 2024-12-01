@@ -75,8 +75,8 @@ public class StudentAndGradeServiceTests {
 
     studentService.createStudent("Juan", "Paulino", "juanmiguel431@gmail.com");
 
-    CollegeStudent student = studentRepository.findByEmailAddress("juanmiguel431@gmail.com");
+    CollegeStudent student = studentRepository.findByEmail("juanmiguel431@gmail.com");
 
-    Assertions.assertEquals("juanmiguel431@gmail.com", student.getEmailAddress(), "Find by email");
+    Assertions.assertEquals("juanmiguel431@gmail.com", student.getEmail(), "Find by email");
   }
 }

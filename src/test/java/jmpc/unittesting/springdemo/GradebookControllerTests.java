@@ -67,7 +67,7 @@ public class GradebookControllerTests {
 
     Assertions.assertEquals("index", mnv.getViewName());
 
-    var student = studentRepository.findByEmailAddress("juanmiguel431_v2@gmail.com");
+    var student = studentRepository.findByEmail("juanmiguel431_v2@gmail.com");
 
     Assertions.assertNotNull(student, "Student should be found");
   }

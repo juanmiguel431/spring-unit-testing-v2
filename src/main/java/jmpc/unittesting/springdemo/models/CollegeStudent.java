@@ -13,16 +13,16 @@ public class CollegeStudent implements Student {
     @Column(name = "lastname")
     private String lastname;
     @Column(name="email")
-    private String emailAddress;
+    private String email;
 
     public CollegeStudent() {
 
     }
 
-    public CollegeStudent(String firstname, String lastname, String emailAddress) {
+    public CollegeStudent(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.emailAddress = emailAddress;
+        this.email = email;
     }
 
     public int getId() {
@@ -49,12 +49,12 @@ public class CollegeStudent implements Student {
         this.lastname = lastname;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 
@@ -68,11 +68,11 @@ public class CollegeStudent implements Student {
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
+                ", emailAddress='" + email + '\'' +
                 '}';
     }
 
     public String studentInformation() {
-       return getFullName() + " " + getEmailAddress();
+       return getFullName() + " " + getEmail();
     }
 }
