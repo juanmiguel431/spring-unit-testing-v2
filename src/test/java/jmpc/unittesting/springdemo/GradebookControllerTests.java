@@ -5,7 +5,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -20,9 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("/application.properties")
 @SpringBootTest
 public class GradebookControllerTests {
-
-  @Autowired
-  private ApplicationContext context;
 
   @Autowired
   private MockMvc mockMvc;
@@ -70,6 +66,29 @@ public class GradebookControllerTests {
     var student = studentRepository.findByEmail("juanmiguel431_v2@gmail.com");
 
     Assertions.assertNotNull(student, "Student should be found");
+  }
+
+  @Test
+  public void deleteStudentHttpRequest() throws Exception {
+    var studentId = 1;
+
+    var student = studentRepository.findById(studentId);
+
+    Assertions.assertTrue(student.isPresent(), "Student should be found");
+
+    var mvcResult = mockMvc.perform(
+        MockMvcRequestBuilders.delete("/{id}", studentId)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var mnv = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("index", mnv.getViewName());
+
+    student = studentRepository.findById(studentId);
+
+    Assertions.assertTrue(student.isEmpty(), "Student should be not found");
   }
 
   @Test
