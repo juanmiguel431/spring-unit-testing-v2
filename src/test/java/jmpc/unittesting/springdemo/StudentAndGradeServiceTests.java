@@ -1,6 +1,7 @@
 package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +29,8 @@ public class StudentAndGradeServiceTests {
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
+  @Autowired
+  private MathGradeRepository mathGradeRepository;
 
   @BeforeEach
   public void beforeEach() {
@@ -81,7 +84,11 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
-  public void createGradeService() {
+  public void createGradeService() throws Exception {
     studentService.createGrade(80.5, 1, "Math");
+
+    var grades = mathGradeRepository.findMathGradeByStudentId(1);
+
+    Assertions.assertTrue(grades.iterator().hasNext(), "Student has math grades");
   }
 }
