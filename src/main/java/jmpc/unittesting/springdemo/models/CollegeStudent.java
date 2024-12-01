@@ -68,7 +68,7 @@ public class CollegeStudent implements Student {
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", emailAddress='" + email + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 
