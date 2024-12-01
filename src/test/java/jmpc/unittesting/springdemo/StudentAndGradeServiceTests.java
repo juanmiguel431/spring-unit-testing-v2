@@ -7,10 +7,7 @@ import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
 import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,12 +41,23 @@ public class StudentAndGradeServiceTests {
 
   @BeforeEach
   public void beforeEach() {
+    jdbcTemplate.execute("ALTER TABLE students ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE math_grades ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE history_grades ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE science_grades ALTER COLUMN ID RESTART WITH 1;");
+
     jdbcTemplate.execute("insert into students(firstname, lastname, email) values ('Juan', 'Paulino', 'juanmiguel431@gmail.com')");
+    jdbcTemplate.execute("insert into math_grades (student_id, grade) values (1, 100.0)");
+    jdbcTemplate.execute("insert into history_grades (student_id, grade) values (1, 100.0)");
+    jdbcTemplate.execute("insert into science_grades (student_id, grade) values (1, 100.0)");
   }
 
   @AfterEach
   public void afterEach() {
     jdbcTemplate.execute("delete from students");
+    jdbcTemplate.execute("delete from math_grades");
+    jdbcTemplate.execute("delete from history_grades");
+    jdbcTemplate.execute("delete from science_grades");
   }
 
   @Sql("/insertData.sql")
@@ -86,11 +94,11 @@ public class StudentAndGradeServiceTests {
   @Test
   public void createStudentService() {
 
-    studentService.createStudent("Juan", "Paulino", "juanmiguel431@gmail.com");
+    studentService.createStudent("Juan", "Paulino", "juanmiguel431@create.com");
 
-    CollegeStudent student = studentRepository.findByEmail("juanmiguel431@gmail.com");
+    CollegeStudent student = studentRepository.findByEmail("juanmiguel431@create.com");
 
-    Assertions.assertEquals("juanmiguel431@gmail.com", student.getEmail(), "Find by email");
+    Assertions.assertEquals("juanmiguel431@create.com", student.getEmail(), "Find by email");
   }
 
   @Test
