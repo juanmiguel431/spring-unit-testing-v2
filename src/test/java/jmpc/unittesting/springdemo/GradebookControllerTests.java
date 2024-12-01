@@ -40,7 +40,7 @@ public class GradebookControllerTests {
     request = new MockHttpServletRequest();
     request.setParameter("firstname", "Juan");
     request.setParameter("lastname", "Paulino");
-    request.setParameter("emailAddress", "juanmiguel431_v2@gmail.com");
+    request.setParameter("email", "juanmiguel431_v2@gmail.com");
   }
 
   @BeforeEach
@@ -59,7 +59,7 @@ public class GradebookControllerTests {
             .contentType(MediaType.APPLICATION_JSON)
             .param("firstname", request.getParameterValues("firstname"))
             .param("lastname", request.getParameterValues("lastname"))
-            .param("emailAddress", request.getParameterValues("emailAddress")))
+            .param("email", request.getParameterValues("email")))
         .andExpect(status().isOk())
         .andReturn();
 
