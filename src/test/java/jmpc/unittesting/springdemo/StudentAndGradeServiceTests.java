@@ -81,26 +81,26 @@ public class StudentAndGradeServiceTests {
     var student = studentRepository.findById(1);
     Assertions.assertTrue(student.isPresent(), "Return true");
 
-    var mathGrade = mathGradeRepository.findMathGradeByStudentId(1);
-    var scienceGrade = scienceGradeRepository.findScienceGradeByStudentId(1);
-    var historyGrade = historyGradeRepository.findHistoryGradeGradeByStudentId(1);
+    var mathGrade = mathGradeRepository.findById(1);
+    var scienceGrade = scienceGradeRepository.findById(1);
+    var historyGrade = historyGradeRepository.findById(1);
 
-    Assertions.assertTrue(mathGrade.iterator().hasNext(), "Return true");
-    Assertions.assertTrue(scienceGrade.iterator().hasNext(), "Return true");
-    Assertions.assertTrue(historyGrade.iterator().hasNext(), "Return true");
+    Assertions.assertTrue(mathGrade.isPresent(), "Return true");
+    Assertions.assertTrue(scienceGrade.isPresent(), "Return true");
+    Assertions.assertTrue(historyGrade.isPresent(), "Return true");
 
     studentAndGradeService.deleteStudentById(1);
 
     student = studentRepository.findById(1);
     Assertions.assertFalse(student.isPresent(), "Return false");
 
-    mathGrade = mathGradeRepository.findMathGradeByStudentId(1);
-    scienceGrade = scienceGradeRepository.findScienceGradeByStudentId(1);
-    historyGrade = historyGradeRepository.findHistoryGradeGradeByStudentId(1);
+    mathGrade = mathGradeRepository.findById(1);
+    scienceGrade = scienceGradeRepository.findById(1);
+    historyGrade = historyGradeRepository.findById(1);
 
-    Assertions.assertFalse(mathGrade.iterator().hasNext(), "Return False");
-    Assertions.assertFalse(scienceGrade.iterator().hasNext(), "Return False");
-    Assertions.assertFalse(historyGrade.iterator().hasNext(), "Return False");
+    Assertions.assertTrue(mathGrade.isEmpty(), "Return True");
+    Assertions.assertTrue(scienceGrade.isEmpty(), "Return True");
+    Assertions.assertTrue(historyGrade.isEmpty(), "Return True");
   }
 
   @Test
