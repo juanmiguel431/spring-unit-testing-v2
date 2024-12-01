@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jmpc.unittesting.springdemo.models.Grade;
 
 @Entity
-@Table(name = "math_grade")
+@Table(name = "math_grades")
 public class MathGrade implements Grade {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

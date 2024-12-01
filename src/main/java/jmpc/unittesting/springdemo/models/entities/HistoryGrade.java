@@ -5,7 +5,7 @@ import jmpc.unittesting.springdemo.models.Grade;
 
 
 @Entity
-@Table(name = "history_grade")
+@Table(name = "history_grades")
 public class HistoryGrade implements Grade {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
