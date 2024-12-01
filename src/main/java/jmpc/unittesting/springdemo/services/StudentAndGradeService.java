@@ -1,8 +1,13 @@
 package jmpc.unittesting.springdemo.services;
 
+import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+import jmpc.unittesting.springdemo.models.entities.HistoryGrade;
 import jmpc.unittesting.springdemo.models.entities.MathGrade;
+import jmpc.unittesting.springdemo.models.entities.ScienceGrade;
+import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
 import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
+import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +19,15 @@ public class StudentAndGradeService {
 
   private final StudentRepository studentRepository;
   private final MathGradeRepository mathGradeRepository;
+  private final HistoryGradeRepository historyGradeRepository;
+  private final ScienceGradeRepository scienceGradeRepository;
 
   @Autowired
-  public StudentAndGradeService(StudentRepository studentRepository, MathGradeRepository mathGradeRepository) {
+  public StudentAndGradeService(StudentRepository studentRepository, MathGradeRepository mathGradeRepository, HistoryGradeRepository historyGradeRepository, ScienceGradeRepository scienceGradeRepository) {
     this.studentRepository = studentRepository;
     this.mathGradeRepository = mathGradeRepository;
+    this.historyGradeRepository = historyGradeRepository;
+    this.scienceGradeRepository = scienceGradeRepository;
   }
 
   public void createStudent(String firstName, String lastName, String email) {
@@ -50,7 +59,7 @@ public class StudentAndGradeService {
     return studentRepository.findAll();
   }
 
-  public void createGrade(double grade, int studentId, String type) throws Exception {
+  public void createGrade(double grade, int studentId, GradeType type) throws Exception {
     var student = findById(studentId);
     if (student.isEmpty()) {
       throw new Exception("Student not found");
@@ -60,10 +69,31 @@ public class StudentAndGradeService {
       throw new Exception("Invalid grade");
     }
 
-    var mathGrade = new MathGrade();
-    mathGrade.setStudentId(studentId);
-    mathGrade.setGrade(grade);
+    switch (type){
+      case MATH -> {
+        var classGrade = new MathGrade();
+        classGrade.setStudentId(studentId);
+        classGrade.setGrade(grade);
 
-    this.mathGradeRepository.save(mathGrade);
+        this.mathGradeRepository.save(classGrade);
+        break;
+      }
+      case SCIENCE -> {
+        var classGrade = new ScienceGrade();
+        classGrade.setStudentId(studentId);
+        classGrade.setGrade(grade);
+
+        this.scienceGradeRepository.save(classGrade);
+        break;
+      }
+      case HISTORY -> {
+        var classGrade = new HistoryGrade();
+        classGrade.setStudentId(studentId);
+        classGrade.setGrade(grade);
+
+        this.historyGradeRepository.save(classGrade);
+        break;
+      }
+    }
   }
 }

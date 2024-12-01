@@ -1,7 +1,10 @@
 package jmpc.unittesting.springdemo;
 
+import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
 import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
+import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
@@ -29,8 +32,15 @@ public class StudentAndGradeServiceTests {
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
+
   @Autowired
   private MathGradeRepository mathGradeRepository;
+
+  @Autowired
+  private ScienceGradeRepository scienceGradeRepository;
+
+  @Autowired
+  private HistoryGradeRepository historyGradeRepository;
 
   @BeforeEach
   public void beforeEach() {
@@ -85,10 +95,16 @@ public class StudentAndGradeServiceTests {
 
   @Test
   public void createGradeService() throws Exception {
-    studentService.createGrade(80.5, 1, "Math");
+    studentService.createGrade(80.5, 1, GradeType.MATH);
+    studentService.createGrade(75.4, 1, GradeType.SCIENCE);
+    studentService.createGrade(88.6, 1, GradeType.HISTORY);
 
-    var grades = mathGradeRepository.findMathGradeByStudentId(1);
+    var mathGrades = mathGradeRepository.findMathGradeByStudentId(1);
+    var scienceGrades = scienceGradeRepository.findScienceGradeByStudentId(1);
+    var historyGrades = historyGradeRepository.findHistoryGradeGradeByStudentId(1);
 
-    Assertions.assertTrue(grades.iterator().hasNext(), "Student has math grades");
+    Assertions.assertTrue(mathGrades.iterator().hasNext(), "Student has math grades");
+    Assertions.assertTrue(scienceGrades.iterator().hasNext(), "Student has science grades");
+    Assertions.assertTrue(historyGrades.iterator().hasNext(), "Student has history grades");
   }
 }
