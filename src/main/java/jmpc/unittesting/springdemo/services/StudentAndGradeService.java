@@ -94,6 +94,9 @@ public class StudentAndGradeService {
         this.historyGradeRepository.save(classGrade);
         break;
       }
+      default -> {
+        throw new Exception("type not allowed " + type);
+      }
     }
   }
 }

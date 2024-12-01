@@ -107,4 +107,19 @@ public class StudentAndGradeServiceTests {
     Assertions.assertTrue(scienceGrades.iterator().hasNext(), "Student has science grades");
     Assertions.assertTrue(historyGrades.iterator().hasNext(), "Student has history grades");
   }
+
+  @Test
+  public void createGradeWithInvalidParamsThrowsExceptionService1() {
+    Assertions.assertThrows(Exception.class, () -> {
+      studentService.createGrade(-80.5, 1, GradeType.MATH);
+    });
+  }
+
+  @Test
+  public void createGradeWithInvalidParamsThrowsExceptionService2() {
+    Assertions.assertThrows(Exception.class, () -> {
+      var literature = GradeType.values()[5];
+      studentService.createGrade(80.5, 1, literature);
+    }, "It should throws an exception");
+  }
 }
