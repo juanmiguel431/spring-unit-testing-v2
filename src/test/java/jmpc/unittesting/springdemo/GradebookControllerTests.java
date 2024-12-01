@@ -1,12 +1,13 @@
 package jmpc.unittesting.springdemo;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jmpc.unittesting.springdemo.repositories.StudentRepository;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,18 +26,50 @@ public class GradebookControllerTests {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
+  @Autowired
+  private StudentRepository studentRepository;
+
+  private static MockHttpServletRequest request;
+
 //  Unnecessary code added by the teacher
 //  @MockBean
 //  private StudentAndGradeService studentAndGradeServiceMock;
 
+  @BeforeAll
+  public static void beforeAll() {
+    request = new MockHttpServletRequest();
+    request.setParameter("firstname", "Juan");
+    request.setParameter("lastname", "Paulino");
+    request.setParameter("emailAddress", "juanmiguel431_v2@gmail.com");
+  }
+
   @BeforeEach
   public void beforeEach() {
-    jdbcTemplate.execute("insert into students(id, firstname, lastname, email) values (1, 'Juan', 'Paulino', 'juanmiguel431@gmail.com')");
+    jdbcTemplate.execute("insert into students(firstname, lastname, email) values ('Juan', 'Paulino', 'juanmiguel431@gmail.com')");
   }
 
   @AfterEach
   public void afterEach() {
     jdbcTemplate.execute("delete from students");
+  }
+
+  @Test
+  public void createStudentHttpRequest() throws Exception {
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("firstname", request.getParameterValues("firstname"))
+            .param("lastname", request.getParameterValues("lastname"))
+            .param("emailAddress", request.getParameterValues("emailAddress")))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var mnv = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("index", mnv.getViewName());
+
+    var student = studentRepository.findByEmailAddress("juanmiguel431_v2@gmail.com");
+
+    Assertions.assertNotNull(student, "Student should be found");
   }
 
   @Test
