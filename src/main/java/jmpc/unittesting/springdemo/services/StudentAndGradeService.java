@@ -51,8 +51,24 @@ public class StudentAndGradeService {
     return student.isPresent();
   }
 
-  public void deleteStudentById(int studentId) {
+  public void deleteStudentById(int studentId) throws Exception {
     studentRepository.deleteById(studentId);
+
+    var mathGrades = mathGradeRepository.findMathGradeByStudentId(studentId);
+    var scienceGrades = scienceGradeRepository.findScienceGradeByStudentId(studentId);
+    var historyGrades = historyGradeRepository.findHistoryGradeGradeByStudentId(studentId);
+
+    for (var grade : mathGrades) {
+      deleteGradeById(grade.getId(), GradeType.MATH);
+    }
+
+    for (var grade : historyGrades) {
+      deleteGradeById(grade.getId(), GradeType.HISTORY);
+    }
+
+    for (var grade : scienceGrades) {
+      deleteGradeById(grade.getId(), GradeType.SCIENCE);
+    }
   }
 
   public void deleteGradeById(int gradeId, GradeType type) throws Exception {

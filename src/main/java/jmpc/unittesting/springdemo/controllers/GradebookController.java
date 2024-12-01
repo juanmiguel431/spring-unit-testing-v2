@@ -31,7 +31,7 @@ public class GradebookController {
   }
 
   @DeleteMapping("/{id}")
-  public String delete(@PathVariable Integer id, Model model) {
+  public String delete(@PathVariable Integer id, Model model) throws Exception {
     var exists = studentAndGradeService.checkIfStudentExists(id);
     if (!exists) {
       return "error";

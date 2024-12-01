@@ -77,14 +77,30 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
-  public void deleteStudentStudentByIdService() {
+  public void deleteStudentStudentByIdService() throws Exception {
     var student = studentRepository.findById(1);
     Assertions.assertTrue(student.isPresent(), "Return true");
+
+    var mathGrade = mathGradeRepository.findMathGradeByStudentId(1);
+    var scienceGrade = scienceGradeRepository.findScienceGradeByStudentId(1);
+    var historyGrade = historyGradeRepository.findHistoryGradeGradeByStudentId(1);
+
+    Assertions.assertTrue(mathGrade.iterator().hasNext(), "Return true");
+    Assertions.assertTrue(scienceGrade.iterator().hasNext(), "Return true");
+    Assertions.assertTrue(historyGrade.iterator().hasNext(), "Return true");
 
     studentAndGradeService.deleteStudentById(1);
 
     student = studentRepository.findById(1);
     Assertions.assertFalse(student.isPresent(), "Return false");
+
+    mathGrade = mathGradeRepository.findMathGradeByStudentId(1);
+    scienceGrade = scienceGradeRepository.findScienceGradeByStudentId(1);
+    historyGrade = historyGradeRepository.findHistoryGradeGradeByStudentId(1);
+
+    Assertions.assertFalse(mathGrade.iterator().hasNext(), "Return False");
+    Assertions.assertFalse(scienceGrade.iterator().hasNext(), "Return False");
+    Assertions.assertFalse(historyGrade.iterator().hasNext(), "Return False");
   }
 
   @Test
