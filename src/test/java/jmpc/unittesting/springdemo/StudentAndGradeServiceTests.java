@@ -31,7 +31,7 @@ public class StudentAndGradeServiceTests {
 
   @BeforeEach
   public void beforeEach() {
-    jdbcTemplate.execute("insert into students(id, firstname, lastname, email) values (1, 'Juan', 'Paulino', 'juanmiguel431@gmail.com')");
+    jdbcTemplate.execute("insert into students(firstname, lastname, email) values ('Juan', 'Paulino', 'juanmiguel431@gmail.com')");
   }
 
   @AfterEach
