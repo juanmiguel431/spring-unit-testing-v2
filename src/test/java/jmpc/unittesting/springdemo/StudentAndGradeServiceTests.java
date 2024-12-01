@@ -2,6 +2,7 @@ package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
+import jmpc.unittesting.springdemo.models.entities.MathGrade;
 import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
 import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
 import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
@@ -15,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @TestPropertySource("/application.properties")
@@ -114,6 +116,9 @@ public class StudentAndGradeServiceTests {
     Assertions.assertTrue(mathGrades.iterator().hasNext(), "Student has math grades");
     Assertions.assertTrue(scienceGrades.iterator().hasNext(), "Student has science grades");
     Assertions.assertTrue(historyGrades.iterator().hasNext(), "Student has history grades");
+
+    var grades = (Collection<MathGrade>) mathGrades;
+    Assertions.assertEquals(2, grades.size());
   }
 
   @Test
