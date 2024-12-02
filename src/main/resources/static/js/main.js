@@ -42,7 +42,7 @@ function deleteHistoryGrade(id) {
 }
 
 function studentInfo(id) {
-  window.location.href = "/studentInformation/" + id;
+  window.location.href = "/student-information/" + id;
 }
 
 function deleteStudentV2(studentId) {
