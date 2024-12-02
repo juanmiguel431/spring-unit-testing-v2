@@ -1,7 +1,6 @@
 package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.GradeType;
-import jmpc.unittesting.springdemo.models.GradebookCollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.MathGrade;
 import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
@@ -161,10 +160,11 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
-  public void studentInformation() throws Exception {
-    var gradebookCollegeStudent = studentAndGradeService.getInformation(1);
+  public void studentInformation() {
+    var gradebookCollegeStudentOpt = studentAndGradeService.getInformation(1);
+    Assertions.assertTrue(gradebookCollegeStudentOpt.isPresent());
+    var gradebookCollegeStudent = gradebookCollegeStudentOpt.get();
 
-    Assertions.assertNotNull(gradebookCollegeStudent);
     Assertions.assertEquals(1, gradebookCollegeStudent.getId());
     Assertions.assertEquals("Juan", gradebookCollegeStudent.getFirstname());
     Assertions.assertEquals("Paulino", gradebookCollegeStudent.getLastname());
@@ -179,9 +179,8 @@ public class StudentAndGradeServiceTests {
   }
 
   @Test
-  public void studentInformationThrowsException() throws Exception {
-    Assertions.assertThrows(Exception.class, () -> {
+  public void studentInformationThrowsException() {
       var gradebookCollegeStudent = studentAndGradeService.getInformation(0);
-    });
+      Assertions.assertTrue(gradebookCollegeStudent.isEmpty());
   }
 }

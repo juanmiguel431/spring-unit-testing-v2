@@ -1,9 +1,6 @@
 package jmpc.unittesting.springdemo.services;
 
-import jmpc.unittesting.springdemo.models.Grade;
-import jmpc.unittesting.springdemo.models.GradeType;
-import jmpc.unittesting.springdemo.models.GradebookCollegeStudent;
-import jmpc.unittesting.springdemo.models.StudentGrades;
+import jmpc.unittesting.springdemo.models.*;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.models.entities.HistoryGrade;
 import jmpc.unittesting.springdemo.models.entities.MathGrade;
@@ -136,11 +133,11 @@ public class StudentAndGradeService {
     }
   }
 
-  public GradebookCollegeStudent getInformation(int studentId) throws Exception {
-    Optional<CollegeStudent> student = studentRepository.findById(studentId);
+  public Optional<GradebookCollegeStudent> getInformation(int studentId) {
+    var student = studentRepository.findById(studentId);
 
     if (student.isEmpty()) {
-      throw new Exception("Student not found");
+      return Optional.empty();
     }
 
     var mathGrades = mathGradeRepository.findMathGradeByStudentId(studentId);
@@ -162,6 +159,48 @@ public class StudentAndGradeService {
     studentGrades.setHistoryGradeResults(historyGradeList);
 
     var s = student.get();
-    return new GradebookCollegeStudent(s.getId(), s.getFirstname(), s.getLastname(), s.getEmail(), studentGrades);
+    var gradebookCollegeStudent = new GradebookCollegeStudent(s.getId(), s.getFirstname(), s.getLastname(), s.getEmail(), studentGrades);
+
+    return Optional.of(gradebookCollegeStudent);
+  }
+
+  public Optional<StudentInformationDto> getInformationWithAverage(int studentId) throws Exception {
+    var gradebookCollegeStudentOpt = this.getInformation(studentId);
+
+    if (gradebookCollegeStudentOpt.isEmpty()) {
+      return Optional.empty();
+    }
+
+    var gradebookCollegeStudent = gradebookCollegeStudentOpt.get();
+    var result = new StudentInformationDto();
+    result.setStudent(gradebookCollegeStudentOpt.get());
+
+    var studentGrades = gradebookCollegeStudent.getStudentGrades();
+
+    var mathGradeResults = studentGrades.getMathGradeResults();
+    if (mathGradeResults.isEmpty()) {
+      result.setMathAverage("N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(mathGradeResults);
+      result.setMathAverage(String.format("%.2f", average));
+    }
+
+    var scienceGradeResults = studentGrades.getScienceGradeResults();
+    if (scienceGradeResults.isEmpty()) {
+      result.setScienceAverage("N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(scienceGradeResults);
+      result.setScienceAverage(String.format("%.2f", average));
+    }
+
+    var historyGradeResults = studentGrades.getHistoryGradeResults();
+    if (historyGradeResults.isEmpty()) {
+      result.setHistoryAverage("N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(historyGradeResults);
+      result.setHistoryAverage(String.format("%.2f", average));
+    }
+
+    return Optional.of(result);
   }
 }

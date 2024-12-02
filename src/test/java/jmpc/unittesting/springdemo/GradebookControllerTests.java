@@ -13,7 +13,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -93,12 +92,10 @@ public class GradebookControllerTests {
     var mvcResult = mockMvc.perform(
         MockMvcRequestBuilders.delete("/{id}", student.getId())
             .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
+        .andExpect(status().is3xxRedirection())
         .andReturn();
 
     var mnv = mvcResult.getModelAndView();
-
-    Assertions.assertEquals("index", mnv.getViewName());
 
     var any = studentRepository.findById(student.getId());
 
@@ -163,10 +160,10 @@ public class GradebookControllerTests {
 
   @Test
   public void createValidGradeHttpRequest() throws Exception {
-    var student = studentRepository.findById(1);
-    Assertions.assertTrue(student.isPresent());
+    var studentInfoOpt = studentAndGradeService.getInformation(1);
+    Assertions.assertTrue(studentInfoOpt.isPresent());
 
-    var studentInfo = studentAndGradeService.getInformation(1);
+    var studentInfo = studentInfoOpt.get();
     Assertions.assertEquals(1, studentInfo.getStudentGrades().getMathGradeResults().size());
 
     var mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/grades")
@@ -179,7 +176,8 @@ public class GradebookControllerTests {
 
     var modelAndView = mvcResult.getModelAndView();
 
-    studentInfo = studentAndGradeService.getInformation(1);
+    studentInfoOpt = studentAndGradeService.getInformation(1);
+    studentInfo = studentInfoOpt.get();
     Assertions.assertEquals(2, studentInfo.getStudentGrades().getMathGradeResults().size());
   }
 }

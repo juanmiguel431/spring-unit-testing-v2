@@ -46,42 +46,18 @@ public class GradebookController {
   @GetMapping("/student-information/{id}")
   public String getStudentInformation(@PathVariable int id, Model m) throws Exception {
 
-    var studentOpt = studentAndGradeService.findById(id);
+    var gradebookCollegeStudentOpt = studentAndGradeService.getInformationWithAverage(id);
 
-    if (studentOpt.isEmpty()) {
+    if (gradebookCollegeStudentOpt.isEmpty()) {
       return "error";
     }
 
-    var gradebookCollegeStudent = studentAndGradeService.getInformation(id);
+    var student = gradebookCollegeStudentOpt.get();
 
-    var student = studentOpt.get();
-    m.addAttribute("student", student);
-
-    var studentGrades = gradebookCollegeStudent.getStudentGrades();
-
-    var mathGradeResults = studentGrades.getMathGradeResults();
-    if (mathGradeResults.isEmpty()) {
-      m.addAttribute("mathAverage", "N/A");
-    } else {
-      var average = studentGrades.findGradePointAverage(mathGradeResults);
-      m.addAttribute("mathAverage", average);
-    }
-
-    var scienceGradeResults = studentGrades.getScienceGradeResults();
-    if (scienceGradeResults.isEmpty()) {
-      m.addAttribute("scienceAverage", "N/A");
-    } else {
-      var average = studentGrades.findGradePointAverage(scienceGradeResults);
-      m.addAttribute("scienceAverage", average);
-    }
-
-    var historyGradeResults = studentGrades.getHistoryGradeResults();
-    if (historyGradeResults.isEmpty()) {
-      m.addAttribute("historyAverage", "N/A");
-    } else {
-      var average = studentGrades.findGradePointAverage(historyGradeResults);
-      m.addAttribute("historyAverage", average);
-    }
+    m.addAttribute("student", student.getStudent());
+    m.addAttribute("mathAverage", student.getMathAverage());
+    m.addAttribute("scienceAverage", student.getScienceAverage());
+    m.addAttribute("historyAverage", student.getHistoryAverage());
 
     return "studentInformation";
   }
