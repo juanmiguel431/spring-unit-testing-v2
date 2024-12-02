@@ -42,8 +42,46 @@ public class GradebookController {
     return "redirect:/";
   }
 
-  @GetMapping("/studentInformation/{id}")
-  public String studentInformation(@PathVariable int id, Model m) {
+  @GetMapping("/student-information/{id}")
+  public String getStudentInformation(@PathVariable int id, Model m) throws Exception {
+
+    var studentOpt = studentAndGradeService.findById(id);
+
+    if (studentOpt.isEmpty()) {
+      return "error";
+    }
+
+    var gradebookCollegeStudent = studentAndGradeService.getInformation(id);
+
+    var student = studentOpt.get();
+    m.addAttribute("student", student);
+
+    var studentGrades = gradebookCollegeStudent.getStudentGrades();
+
+    var mathGradeResults = studentGrades.getMathGradeResults();
+    if (mathGradeResults.isEmpty()) {
+      m.addAttribute("mathAverage", "N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(mathGradeResults);
+      m.addAttribute("mathAverage", average);
+    }
+
+    var scienceGradeResults = studentGrades.getScienceGradeResults();
+    if (scienceGradeResults.isEmpty()) {
+      m.addAttribute("scienceAverage", "N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(scienceGradeResults);
+      m.addAttribute("scienceAverage", average);
+    }
+
+    var historyGradeResults = studentGrades.getHistoryGradeResults();
+    if (historyGradeResults.isEmpty()) {
+      m.addAttribute("historyAverage", "N/A");
+    } else {
+      var average = studentGrades.findGradePointAverage(historyGradeResults);
+      m.addAttribute("historyAverage", average);
+    }
+
     return "studentInformation";
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -114,5 +115,33 @@ public class GradebookControllerTests {
     var modelAndView = mvcResult.getModelAndView();
 
     ModelAndViewAssert.assertViewName(modelAndView, "index");
+  }
+
+  @Test
+  public void studentInformationRequest() throws Exception {
+    var student = studentRepository.findById(1);
+    Assertions.assertTrue(student.isPresent());
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/student-information/{id}", 1))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var modelAndView = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("studentInformation", modelAndView.getViewName());
+  }
+
+  @Test
+  public void studentInformationDoesNotExistsRequest() throws Exception {
+    var student = studentRepository.findById(0);
+    Assertions.assertTrue(student.isEmpty());
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/student-information/{id}", 0))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var modelAndView = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("error", modelAndView.getViewName());
   }
 }
