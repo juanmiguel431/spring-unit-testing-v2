@@ -1,6 +1,8 @@
 package jmpc.unittesting.springdemo;
 
+import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
+import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +32,9 @@ public class GradebookControllerTests {
   @Autowired
   private StudentRepository studentRepository;
 
+  @Autowired
+  private StudentAndGradeService studentAndGradeService;
+
   private static MockHttpServletRequest request;
 
   @BeforeAll
@@ -42,12 +47,23 @@ public class GradebookControllerTests {
 
   @BeforeEach
   public void beforeEach() {
+    jdbcTemplate.execute("ALTER TABLE students ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE math_grades ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE history_grades ALTER COLUMN ID RESTART WITH 1;");
+    jdbcTemplate.execute("ALTER TABLE science_grades ALTER COLUMN ID RESTART WITH 1;");
+
     jdbcTemplate.execute("insert into students(firstname, lastname, email) values ('Juan', 'Paulino', 'juanmiguel431@gmail.com')");
+    jdbcTemplate.execute("insert into math_grades (student_id, grade) values (1, 100.0)");
+    jdbcTemplate.execute("insert into history_grades (student_id, grade) values (1, 100.0)");
+    jdbcTemplate.execute("insert into science_grades (student_id, grade) values (1, 100.0)");
   }
 
   @AfterEach
   public void afterEach() {
     jdbcTemplate.execute("delete from students");
+    jdbcTemplate.execute("delete from math_grades");
+    jdbcTemplate.execute("delete from history_grades");
+    jdbcTemplate.execute("delete from science_grades");
   }
 
   @Test
@@ -143,5 +159,27 @@ public class GradebookControllerTests {
     var modelAndView = mvcResult.getModelAndView();
 
     Assertions.assertEquals("error", modelAndView.getViewName());
+  }
+
+  @Test
+  public void createValidGradeHttpRequest() throws Exception {
+    var student = studentRepository.findById(1);
+    Assertions.assertTrue(student.isPresent());
+
+    var studentInfo = studentAndGradeService.getInformation(1);
+    Assertions.assertEquals(1, studentInfo.getStudentGrades().getMathGradeResults().size());
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/grades")
+        .contentType(MediaType.APPLICATION_JSON)
+        .param("grade", "85.0")
+        .param("type", GradeType.MATH.toString())
+        .param("studentId", "1"))
+        .andExpect(status().is3xxRedirection())
+        .andReturn();
+
+    var modelAndView = mvcResult.getModelAndView();
+
+    studentInfo = studentAndGradeService.getInformation(1);
+    Assertions.assertEquals(2, studentInfo.getStudentGrades().getMathGradeResults().size());
   }
 }

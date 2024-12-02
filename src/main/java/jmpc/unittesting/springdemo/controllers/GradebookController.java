@@ -1,5 +1,6 @@
 package jmpc.unittesting.springdemo.controllers;
 
+import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +84,22 @@ public class GradebookController {
     }
 
     return "studentInformation";
+  }
+
+  @PostMapping("/grades")
+  public String createGrade(
+      @RequestParam("grade") double grade,
+      @RequestParam("type") GradeType type,
+      @RequestParam("studentId") int studentId
+  ) throws Exception {
+
+    var studentExists = studentAndGradeService.checkIfStudentExists(studentId);
+    if (!studentExists) {
+      return "error";
+    }
+
+    studentAndGradeService.createGrade(grade, studentId, type);
+
+    return String.format("redirect:/student-information/%d", studentId) ;
   }
 }
