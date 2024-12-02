@@ -199,4 +199,18 @@ public class GradebookControllerTests {
     mathGrade = mathGradeRepository.findById(1);
     Assertions.assertTrue(mathGrade.isEmpty());
   }
+
+  @Test
+  public void deleteAnInValidGradeHttpRequest() throws Exception {
+    var mathGrade = mathGradeRepository.findById(0);
+    Assertions.assertTrue(mathGrade.isEmpty());
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/grades/{type}/{id}", GradeType.MATH, 0))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    var modelAndView = mvcResult.getModelAndView();
+
+    Assertions.assertEquals("error", modelAndView.getViewName());
+  }
 }
