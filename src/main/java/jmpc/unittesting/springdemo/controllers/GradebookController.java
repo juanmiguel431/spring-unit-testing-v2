@@ -78,4 +78,16 @@ public class GradebookController {
 
     return String.format("redirect:/student-information/%d", studentId) ;
   }
+
+  @DeleteMapping("/grades/{type}/{id}")
+  public String deleteGrade(@PathVariable GradeType type, @PathVariable int id) {
+    try {
+      var studentId = studentAndGradeService.deleteGradeById(id, type);
+
+      return String.format("redirect:/student-information/%d", studentId) ;
+
+    } catch (Exception e) {
+      return "error";
+    }
+  }
 }

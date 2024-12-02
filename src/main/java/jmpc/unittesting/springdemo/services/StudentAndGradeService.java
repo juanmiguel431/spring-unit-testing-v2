@@ -72,20 +72,37 @@ public class StudentAndGradeService {
     }
   }
 
-  public void deleteGradeById(int gradeId, GradeType type) throws Exception {
+  public int deleteGradeById(int gradeId, GradeType type) throws Exception {
     switch (type){
-      case MATH:
-        this.mathGradeRepository.deleteById(gradeId);
+      case MATH: {
+        var grade = this.mathGradeRepository.findById(gradeId);
+        if (grade.isPresent()) {
+          this.mathGradeRepository.deleteById(gradeId);
+          return grade.get().getStudentId();
+        }
         break;
-      case SCIENCE:
-        this.scienceGradeRepository.deleteById(gradeId);
+      }
+      case SCIENCE: {
+        var grade = this.scienceGradeRepository.findById(gradeId);
+        if (grade.isPresent()) {
+          this.scienceGradeRepository.deleteById(gradeId);
+          return grade.get().getStudentId();
+        }
         break;
-      case HISTORY:
-        this.historyGradeRepository.deleteById(gradeId);
+      }
+      case HISTORY: {
+        var grade = this.historyGradeRepository.findById(gradeId);
+        if (grade.isPresent()) {
+          this.historyGradeRepository.deleteById(gradeId);
+          return grade.get().getStudentId();
+        }
         break;
+      }
       default:
         throw new Exception("type not allowed " + type);
     }
+
+    throw new Exception("Grade not found " + gradeId);
   }
 
   public Iterable<CollegeStudent> getGradebook() {

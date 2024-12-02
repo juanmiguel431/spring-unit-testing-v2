@@ -1,6 +1,7 @@
 package jmpc.unittesting.springdemo;
 
 import jmpc.unittesting.springdemo.models.GradeType;
+import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.*;
@@ -30,6 +31,9 @@ public class GradebookControllerTests {
 
   @Autowired
   private StudentRepository studentRepository;
+
+  @Autowired
+  private MathGradeRepository mathGradeRepository;
 
   @Autowired
   private StudentAndGradeService studentAndGradeService;
@@ -179,5 +183,20 @@ public class GradebookControllerTests {
     studentInfoOpt = studentAndGradeService.getInformation(1);
     studentInfo = studentInfoOpt.get();
     Assertions.assertEquals(2, studentInfo.getStudentGrades().getMathGradeResults().size());
+  }
+
+  @Test
+  public void deleteAValidGradeHttpRequest() throws Exception {
+    var mathGrade = mathGradeRepository.findById(1);
+    Assertions.assertTrue(mathGrade.isPresent());
+
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/grades/{type}/{id}", GradeType.MATH, 1))
+        .andExpect(status().is3xxRedirection())
+        .andReturn();
+
+    var modelAndView = mvcResult.getModelAndView();
+
+    mathGrade = mathGradeRepository.findById(1);
+    Assertions.assertTrue(mathGrade.isEmpty());
   }
 }
