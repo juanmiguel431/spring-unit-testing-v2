@@ -49,10 +49,10 @@ public class RestGradebookController {
     return gradebook.getStudents();
   }
 
-  @DeleteMapping("/student/{id}")
+  @DeleteMapping("/{id}")
   public List<GradebookCollegeStudent> deleteStudent(@PathVariable int id) throws Exception {
 
-    if (!studentAndGradeService.checkIfStudentIsNull(id)) {
+    if (studentAndGradeService.checkIfStudentIsNull(id)) {
       throw new StudentOrGradeNotFoundException("Student or Grade was not found");
     }
 

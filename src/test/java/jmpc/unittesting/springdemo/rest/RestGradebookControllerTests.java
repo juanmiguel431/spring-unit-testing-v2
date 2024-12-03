@@ -124,4 +124,20 @@ public class RestGradebookControllerTests {
     var studentResult = studentRepository.findByEmail("user1@test.com");
     Assertions.assertNotNull(studentResult, "Student should be found");
   }
+
+  @Test
+  public void deleteStudentHttpRequest() throws Exception {
+    var student = studentRepository.findById(1);
+    Assertions.assertTrue(student.isPresent());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/gradebook/{id}", 1)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$", hasSize(0)))
+        .andReturn();
+
+    var studentResult = studentRepository.findById(1);
+    Assertions.assertTrue(studentResult.isEmpty(), "Student should not be found");
+  }
 }
