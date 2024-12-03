@@ -155,4 +155,20 @@ public class RestGradebookControllerTests {
         .andExpect(jsonPath("$.message", is("Student or Grade was not found")))
         .andReturn();
   }
+
+  @Test
+  public void studentInformationHttpRequest() throws Exception {
+    var student = studentRepository.findById(1);
+    Assertions.assertTrue(student.isPresent());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.get("/api/gradebook/student-information/{id}", 1)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.id", is(1)))
+        .andExpect(jsonPath("$.firstname", is("Firstname")))
+        .andExpect(jsonPath("$.lastname", is("Lastname")))
+        .andExpect(jsonPath("$.email", is("user@test.com")))
+        .andReturn();
+  }
 }
