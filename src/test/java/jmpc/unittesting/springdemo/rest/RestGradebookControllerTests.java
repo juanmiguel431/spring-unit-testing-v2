@@ -6,13 +6,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
-import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
 import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
-import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
-import jmpc.unittesting.springdemo.services.StudentAndGradeService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,18 +42,6 @@ public class RestGradebookControllerTests {
 
   @Autowired
   private MathGradeRepository mathGradeRepository;
-
-  @Autowired
-  private ScienceGradeRepository scienceGradeRepository;
-
-  @Autowired
-  private HistoryGradeRepository historyGradeRepository;
-
-  @Autowired
-  private StudentAndGradeService studentAndGradeService;
-
-  @Mock
-  private StudentAndGradeService studentAndGradeServiceMock;
 
   @Autowired
   private MockMvc mockMvc;
