@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import jmpc.unittesting.springdemo.models.GradeType;
 import jmpc.unittesting.springdemo.models.entities.CollegeStudent;
 import jmpc.unittesting.springdemo.repositories.HistoryGradeRepository;
 import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
@@ -186,4 +187,21 @@ public class RestGradebookControllerTests {
         .andReturn();
   }
 
+  @Test
+  public void createStudentGradeHttpRequest() throws Exception {
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/gradebook/grades")
+            .contentType(APPLICATION_JSON)
+            .param("studentId", "1")
+            .param("grade", "85.5")
+            .param("type", GradeType.MATH.toString()))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.id", is(1)))
+        .andExpect(jsonPath("$.firstname", is("Firstname")))
+        .andExpect(jsonPath("$.lastname", is("Lastname")))
+        .andExpect(jsonPath("$.email", is("user@test.com")))
+        .andExpect(jsonPath("$.studentGrades.mathGradeResults", hasSize(2)))
+        .andReturn();
+  }
 }

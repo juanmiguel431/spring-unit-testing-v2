@@ -64,10 +64,10 @@ public class RestGradebookController {
   @PostMapping(value = "/grades")
   public GradebookCollegeStudent createGrade(
       @RequestParam("grade") double grade,
-      @RequestParam("gradeType") GradeType gradeType,
+      @RequestParam("type") GradeType gradeType,
       @RequestParam("studentId") int studentId) {
 
-    if (!studentAndGradeService.checkIfStudentIsNull(studentId)) {
+    if (studentAndGradeService.checkIfStudentIsNull(studentId)) {
       throw new StudentOrGradeNotFoundException("Student or Grade was not found");
     }
 
