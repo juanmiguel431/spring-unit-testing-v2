@@ -25,29 +25,28 @@ function showOrHideGrade(gradeType) {
   }
 }
 
-function deleteStudent(id) {
-  window.location.href = "/delete/student/" + id;
+function deleteResource(path) {
+  const form = document.getElementById('deleteForm');
+  form.setAttribute('action', path);
+  form.submit();
 }
 
-function deleteMathGrade(id) {
-  window.location.href = "/grades/" + id + "/" + "math";
+function deleteMathGrade(gradeId) {
+  deleteResource(`/grades/MATH/${gradeId}`);
 }
 
-function deleteScienceGrade(id) {
-  window.location.href = "/grades/" + id + "/" + "science";
+function deleteScienceGrade(gradeId) {
+  deleteResource(`/grades/SCIENCE/${gradeId}`);
 }
 
-function deleteHistoryGrade(id) {
-  window.location.href = "/grades/" + id + "/" + "history";
+function deleteHistoryGrade(gradeId) {
+  deleteResource(`/grades/HISTORY/${gradeId}`);
 }
 
 function studentInfo(id) {
   window.location.href = "/student-information/" + id;
 }
 
-function deleteStudentV2(studentId) {
-  const form = document.getElementById('deleteForm');
-  const path = `/${studentId}`;
-  form.setAttribute('action', path);
-  form.submit();
+function deleteStudent(studentId) {
+  deleteResource(`/${studentId}`);
 }

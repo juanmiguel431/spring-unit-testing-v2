@@ -64,7 +64,7 @@
         <span th:text="${student.email}"></span>
           <svg
             th:id="'delete_' + ${student.id}"
-            th:onclick="|deleteStudentV2('${student.id}');|"
+            th:onclick="|deleteStudent('${student.id}');|"
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="16"
@@ -79,9 +79,7 @@
     </tr>
   </table>
 
-  <form id="deleteForm" th:action="@{/}" th:method="delete" style="display:none;">
-    <input type="hidden" name="_method" value="DELETE"/>
-  </form>
+  <form id="deleteForm" action="/" th:method="delete" style="display:none;"></form>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
