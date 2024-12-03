@@ -65,7 +65,7 @@ public class StudentAndGradeServiceTests {
   @Sql("/insertData.sql")
   @Test
   public void getGradebookService() {
-    Iterable<CollegeStudent> iterableCollegeStudents = studentAndGradeService.getGradebook();
+    Iterable<CollegeStudent> iterableCollegeStudents = studentAndGradeService.findAllStudents();
 
     List<CollegeStudent> collegeStudents = new ArrayList<>();
 
