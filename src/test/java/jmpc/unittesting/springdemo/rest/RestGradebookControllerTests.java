@@ -10,10 +10,7 @@ import jmpc.unittesting.springdemo.repositories.MathGradeRepository;
 import jmpc.unittesting.springdemo.repositories.ScienceGradeRepository;
 import jmpc.unittesting.springdemo.repositories.StudentRepository;
 import jmpc.unittesting.springdemo.services.StudentAndGradeService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -110,5 +107,21 @@ public class RestGradebookControllerTests {
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
         .andReturn();
+  }
+
+  @Test
+  public void createStudentHttpRequest() throws Exception {
+    var student = new CollegeStudent("User1", "", "user1@test.com");
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/gradebook/")
+            .contentType(APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(student)))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andReturn();
+
+    var studentResult = studentRepository.findByEmail("user1@test.com");
+    Assertions.assertNotNull(studentResult, "Student should be found");
   }
 }
