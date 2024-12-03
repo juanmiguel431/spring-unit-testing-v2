@@ -239,4 +239,18 @@ public class RestGradebookControllerTests {
         .andReturn();
   }
 
+  @Test
+  public void deleteGradeThatDoesNotExistsHttpRequest() throws Exception {
+    var grade = mathGradeRepository.findById(0);
+    Assertions.assertTrue(grade.isEmpty());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/gradebook/grades/{id}/{gradeType}", 0, GradeType.MATH)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().is4xxClientError())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.status", is(404)))
+        .andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+        .andReturn();
+  }
+
 }
