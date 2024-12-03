@@ -16,8 +16,8 @@ public class GradebookController {
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String get(Model m) {
-    var collegeStudents = studentAndGradeService.getGradebook();
-    m.addAttribute("students", collegeStudents);
+    var students = studentAndGradeService.findAllStudents();
+    m.addAttribute("students", students);
     return "index";
   }
 
@@ -25,7 +25,7 @@ public class GradebookController {
   public String create(@ModelAttribute(name = "students") CollegeStudent student, Model model) {
     studentAndGradeService.createStudent(student.getFirstname(), student.getLastname(), student.getEmail());
 
-    var students = studentAndGradeService.getGradebook();
+    var students = studentAndGradeService.findAllStudents();
     model.addAttribute("students", students);
 
     return "index";

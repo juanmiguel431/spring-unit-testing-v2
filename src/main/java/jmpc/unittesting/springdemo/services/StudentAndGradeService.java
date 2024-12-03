@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -105,7 +106,7 @@ public class StudentAndGradeService {
     throw new Exception("Grade not found " + gradeId);
   }
 
-  public Iterable<CollegeStudent> getGradebook() {
+  public Iterable<CollegeStudent> findAllStudents() {
     return studentRepository.findAll();
   }
 
@@ -181,7 +182,7 @@ public class StudentAndGradeService {
     return Optional.of(gradebookCollegeStudent);
   }
 
-  public Optional<StudentInformationDto> getInformationWithAverage(int studentId) throws Exception {
+  public Optional<StudentInformationDto> getInformationWithAverage(int studentId) {
     var gradebookCollegeStudentOpt = this.getInformation(studentId);
 
     if (gradebookCollegeStudentOpt.isEmpty()) {
@@ -219,5 +220,55 @@ public class StudentAndGradeService {
     }
 
     return Optional.of(result);
+  }
+
+  public Gradebook getGradebook () {
+
+    Iterable<CollegeStudent> collegeStudents = studentRepository.findAll();
+    Iterable<MathGrade> mathGrades = mathGradeRepository.findAll();
+    Iterable<ScienceGrade> scienceGrades = scienceGradeRepository.findAll();
+    Iterable<HistoryGrade> historyGrades = historyGradeRepository.findAll();
+
+    var gradebook = new Gradebook();
+
+    var studentGrades = new StudentGrades();
+
+    for (CollegeStudent collegeStudent : collegeStudents) {
+      List<Grade> mathGradesPerStudent = new ArrayList<>();
+      List<Grade> scienceGradesPerStudent = new ArrayList<>();
+      List<Grade> historyGradesPerStudent = new ArrayList<>();
+
+      for (MathGrade grade : mathGrades) {
+        if (grade.getStudentId() == collegeStudent.getId()) {
+          mathGradesPerStudent.add(grade);
+        }
+      }
+      for (ScienceGrade grade : scienceGrades) {
+        if (grade.getStudentId() == collegeStudent.getId()) {
+          scienceGradesPerStudent.add(grade);
+        }
+      }
+
+      for (HistoryGrade grade : historyGrades) {
+        if (grade.getStudentId() == collegeStudent.getId()) {
+          historyGradesPerStudent.add(grade);
+        }
+      }
+
+      studentGrades.setMathGradeResults(mathGradesPerStudent);
+      studentGrades.setScienceGradeResults(scienceGradesPerStudent);
+      studentGrades.setHistoryGradeResults(historyGradesPerStudent);
+
+      var gradebookCollegeStudent = new GradebookCollegeStudent(
+          collegeStudent.getId(),
+          collegeStudent.getFirstname(),
+          collegeStudent.getLastname(),
+          collegeStudent.getEmail(),
+          studentGrades);
+
+      gradebook.getStudents().add(gradebookCollegeStudent);
+    }
+
+    return gradebook;
   }
 }
