@@ -221,4 +221,22 @@ public class RestGradebookControllerTests {
         .andExpect(jsonPath("$.message", is("Student or Grade was not found")))
         .andReturn();
   }
+
+  @Test
+  public void deleteGradeHttpRequest() throws Exception {
+    var grade = mathGradeRepository.findById(1);
+    Assertions.assertTrue(grade.isPresent());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/gradebook/grades/{id}/{gradeType}", 1, GradeType.MATH)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.id", is(1)))
+        .andExpect(jsonPath("$.firstname", is("Firstname")))
+        .andExpect(jsonPath("$.lastname", is("Lastname")))
+        .andExpect(jsonPath("$.email", is("user@test.com")))
+        .andExpect(jsonPath("$.studentGrades.mathGradeResults", hasSize(0)))
+        .andReturn();
+  }
+
 }
