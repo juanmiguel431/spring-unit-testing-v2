@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("/application-test.properties")
@@ -139,5 +140,19 @@ public class RestGradebookControllerTests {
 
     var studentResult = studentRepository.findById(1);
     Assertions.assertTrue(studentResult.isEmpty(), "Student should not be found");
+  }
+
+  @Test
+  public void deleteStudentThatDoesNotExistsHttpRequest() throws Exception {
+    var student = studentRepository.findById(0);
+    Assertions.assertTrue(student.isEmpty());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/gradebook/{id}", 0)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().is4xxClientError())
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.status", is(404)))
+        .andExpect(jsonPath("$.message", is("Student or Grade was not found")))
+        .andReturn();
   }
 }
